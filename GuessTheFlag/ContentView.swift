@@ -14,6 +14,8 @@ struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
     @State private var score = 0
+    @State private var questionCounter = 0
+    @State private var endingGame = false
     
     
     var body: some View {
@@ -58,7 +60,7 @@ struct ContentView: View {
                 Spacer()
                 Spacer()
                 
-                Text("Score: ???")
+                Text("Score: \(score)")
                     .foregroundStyle(.white)
                     .font(.title.bold())
                 
@@ -69,7 +71,22 @@ struct ContentView: View {
         .alert(scoreTitle, isPresented: $showingScore) {
             Button("Continue", action: askQuestion)
         } message: {
-            Text("Your score is \(score)")
+            Text("Your score is \(score).")
+        }
+        .alert("Game Over", isPresented: $endingGame) {
+            Button("Reset", action: reset)
+        } message: {
+            Text("Your final score is \(score).")
+            switch score {
+            case 8:
+                Text("Perfect!")
+            case 6...7:
+                Text("Well done.")
+            case 5:
+                Text("Could be better...")
+            default:
+                Text("Better luck next time...")
+            }
         }
     }
     
@@ -86,6 +103,16 @@ struct ContentView: View {
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        questionCounter += 1
+        if questionCounter == 8 {
+            endingGame = true
+        }
+    }
+    
+    func reset() {
+        score = 0
+        questionCounter = 0
+        endingGame = false
     }
 }
 
