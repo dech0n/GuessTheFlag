@@ -55,9 +55,9 @@
 			children = (
 				B9467E262BD8A5320022D7A8 /* GuessTheFlagApp.swift */,
 				B9467E282BD8A5320022D7A8 /* ContentView.swift */,
+				B9D90F562BE576C10063A324 /* FlagImage.swift */,
 				B9467E2A2BD8A5330022D7A8 /* Assets.xcassets */,
 				B9467E2C2BD8A5330022D7A8 /* Preview Content */,
-				B9D90F562BE576C10063A324 /* FlagImage.swift */,
 			);
 			path = GuessTheFlag;
 			sourceTree = "<group>";

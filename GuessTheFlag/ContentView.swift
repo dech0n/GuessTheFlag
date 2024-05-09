@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Spain", "UK", "Ukraine", "US"].shuffled()
     @State private var correctAnswer = Int.random(in: 0...2)
+    @State private var tappedFlag = 0
+    @State private var rotationDegrees = 0.0
     
     @State private var showingScore = false
     @State private var scoreTitle = ""
@@ -45,15 +47,29 @@ struct ContentView: View {
                     ForEach(0..<3) { number in
                         Button {
                             flagTapped(number)
+                            // tapped flag spin 360º on Y-axis
+                            
+                            withAnimation(.linear) {
+                                rotationDegrees += 360
+                            }
+                            
+                            // other 2 flags fade to 25% opacity
                         } label: {
                             FlagImage(countries: countries, number: number)
                         }
+                        .rotation3DEffect(.degrees(tappedFlag == number ? rotationDegrees : .zero), axis: (x: 0.0, y: 1.0, z: 0.0))
+                        .transition(.opacity)
                     }
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
                 .background(.regularMaterial)
                 .clipShape(.rect(cornerRadius: 20))
+                .onTapGesture {
+                    withAnimation {
+                        
+                    }
+                }
                 
                 Spacer()
                 Spacer()
@@ -89,6 +105,8 @@ struct ContentView: View {
     }
     
     func flagTapped(_ number: Int) {
+        tappedFlag = number
+        
         if number == correctAnswer {
             scoreTitle = "Correct"
             score += 1
