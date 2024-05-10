@@ -68,11 +68,6 @@ struct ContentView: View {
                 .padding(.vertical, 20)
                 .background(.regularMaterial)
                 .clipShape(.rect(cornerRadius: 20))
-                .onTapGesture {
-                    withAnimation {
-                        
-                    }
-                }
                 
                 Spacer()
                 Spacer()
