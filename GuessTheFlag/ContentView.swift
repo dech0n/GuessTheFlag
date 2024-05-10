@@ -10,8 +10,10 @@ import SwiftUI
 struct ContentView: View {
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Spain", "UK", "Ukraine", "US"].shuffled()
     @State private var correctAnswer = Int.random(in: 0...2)
-    @State private var tappedFlag = 0
+    @State private var tappedFlag = 3 // outside range of displayed flags
+    
     @State private var rotationDegrees = 0.0
+    @State private var opacityLevel = 1.0
     
     @State private var showingScore = false
     @State private var scoreTitle = ""
@@ -47,18 +49,19 @@ struct ContentView: View {
                     ForEach(0..<3) { number in
                         Button {
                             flagTapped(number)
-                            // tapped flag spin 360º on Y-axis
                             
                             withAnimation(.linear) {
+                                // tapped flag spin 360º on Y-axis
                                 rotationDegrees += 360
+                                // other 2 flags fade to 25% opacity
+                                opacityLevel -= 0.75
                             }
                             
-                            // other 2 flags fade to 25% opacity
                         } label: {
                             FlagImage(countries: countries, number: number)
                         }
                         .rotation3DEffect(.degrees(tappedFlag == number ? rotationDegrees : .zero), axis: (x: 0.0, y: 1.0, z: 0.0))
-                        .transition(.opacity)
+                        .opacity(tappedFlag == number ? 1 : opacityLevel)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -120,6 +123,8 @@ struct ContentView: View {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
         questionCounter += 1
+        opacityLevel = 1
+        
         if questionCounter == 8 {
             endingGame = true
         }
