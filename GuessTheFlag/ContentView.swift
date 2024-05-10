@@ -14,6 +14,7 @@ struct ContentView: View {
     
     @State private var rotationDegrees = 0.0
     @State private var opacityLevel = 1.0
+    @State private var scaleLevel = 1.0
     
     @State private var showingScore = false
     @State private var scoreTitle = ""
@@ -53,15 +54,20 @@ struct ContentView: View {
                             withAnimation(.linear) {
                                 // tapped flag spin 360º on Y-axis
                                 rotationDegrees += 360
-                                // other 2 flags fade to 25% opacity
-                                opacityLevel -= 0.75
+                                // other 2 flags fade to 25% opacity and scale down to half size
+                                opacityLevel *= 0.25
+                                scaleLevel *= 0.75
                             }
                             
                         } label: {
                             FlagImage(countries: countries, number: number)
                         }
-                        .rotation3DEffect(.degrees(tappedFlag == number ? rotationDegrees : .zero), axis: (x: 0.0, y: 1.0, z: 0.0))
+                        .rotation3DEffect(
+                            .degrees(tappedFlag == number ? rotationDegrees : .zero), 
+                            axis: (x: 0.0, y: 1.0, z: 0.0)
+                        )
                         .opacity(tappedFlag == number ? 1 : opacityLevel)
+                        .scaleEffect(tappedFlag == number ? 1 : scaleLevel)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -118,7 +124,11 @@ struct ContentView: View {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
         questionCounter += 1
+        
+        // reset values
         opacityLevel = 1
+        scaleLevel = 1
+        tappedFlag = 3
         
         if questionCounter == 8 {
             endingGame = true
